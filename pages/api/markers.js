@@ -2,6 +2,12 @@
 
 import dataDefault, { generate10KData } from "@/src/data";
 
+export const config = {
+  api: {
+    responseLimit: "8mb",
+  },
+};
+
 export default function handler(req, res) {
   res.send({
     ten_k_data: dataDefault,
