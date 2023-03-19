@@ -3,6 +3,7 @@ import GoogleMapReact from "google-map-react";
 import useSupercluster from "use-supercluster";
 import { API_KEY, defaultCenter } from "@/src/constants";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
+import dataDefault, { generate10KData } from "@/src/data";
 
 const Marker = ({ children }) => children;
 
@@ -20,9 +21,20 @@ export default function App() {
   });
 
   const loadAllPoints = useCallback(async () => {
-    const res = await fetch("/api/markers").then((res) => res.json());
+    //  const res = await fetch("/api/markers").then((res) => res.json());
 
-    const points = res.hundred_k_data.map(([name, lat, lng]) => ({
+    const points = [
+      ...dataDefault,
+      ...generate10KData(),
+      ...generate10KData(0.5),
+      ...generate10KData(1.2),
+      ...generate10KData(1.5),
+      ...generate10KData(1.7),
+      ...generate10KData(2.0),
+      ...generate10KData(2.2),
+      ...generate10KData(2.5),
+      ...generate10KData(3),
+    ].map(([name, lat, lng]) => ({
       type: "Feature",
       properties: { cluster: false, crimeId: lat, category: lng },
       geometry: {
@@ -33,10 +45,6 @@ export default function App() {
     setPoints(points);
   }, []);
 
-  useEffect(() => {
-    loadAllPoints();
-  }, [loadAllPoints]);
-
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <GoogleMapReact
@@ -46,6 +54,7 @@ export default function App() {
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map }) => {
           mapRef.current = map;
+          loadAllPoints();
         }}
         onChange={({ zoom, bounds }) => {
           setZoom(zoom);
