@@ -1,0 +1,10 @@
+{
+  "resourceName": "markersDb",
+  "tableName": "markersDb",
+  "partitionKey": {
+    "fieldName": "uid",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

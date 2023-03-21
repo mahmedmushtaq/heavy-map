@@ -1,0 +1,29 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-largemapnext-dev-163206-authRole",
+      "UnauthRoleArn": "arn:aws:iam::199432011961:role/amplify-largemapnext-dev-163206-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::199432011961:role/amplify-largemapnext-dev-163206-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-largemapnext-dev-163206-deployment",
+      "UnauthRoleName": "amplify-largemapnext-dev-163206-unauthRole",
+      "StackName": "amplify-largemapnext-dev-163206",
+      "StackId": "arn:aws:cloudformation:us-east-1:199432011961:stack/amplify-largemapnext-dev-163206/051ccee0-c7dc-11ed-8c15-0a9d34fe8977",
+      "AmplifyAppId": "d2st43x239lfew"
+    },
+    "categories": {
+      "function": {
+        "MarkerHandler": {
+          "deploymentBucketName": "amplify-largemapnext-dev-163206-deployment",
+          "s3Key": "amplify-builds/MarkerHandler-78707a5956785343462b-build.zip"
+        }
+      },
+      "api": {
+        "marker": {}
+      },
+      "storage": {
+        "markersDb": {}
+      }
+    }
+  }
+}

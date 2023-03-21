@@ -1,117 +1,91 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
-import GoogleMapReact from "google-map-react";
-import useSupercluster from "use-supercluster";
-import { API_KEY, defaultCenter } from "@/src/constants";
-import AddLocationIcon from "@mui/icons-material/AddLocation";
-import dataDefault, { generate10KData } from "@/src/data";
+import { useEffect, useState } from "react";
+import {
+  allMarkers,
+  generateRandomMarkersApi,
+  totalMarkersDataPointsApi,
+} from "@/src/helpers/api";
+import { Button, Grid, TextField, Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import LoadingButton from "@/src/components/shared/LoadingButton";
 
-const Marker = ({ children }) => children;
+const Home = () => {
+  const [sampleData, setSampleData] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [totalMarkersDataPoints, setTotalMarkersDataPoints] = useState("...");
+  const [err, setErr] = useState("");
 
-export default function App() {
-  const mapRef = useRef();
-  const [bounds, setBounds] = useState(null);
-  const [zoom, setZoom] = useState(10);
-  const [points, setPoints] = useState([]);
-
-  const { clusters, supercluster } = useSupercluster({
-    points,
-    bounds,
-    zoom,
-    options: { radius: 75, maxZoom: 20 },
-  });
-
-  const loadAllPoints = useCallback(async () => {
-    //  const res = await fetch("/api/markers").then((res) => res.json());
-
-    const points = [
-      ...dataDefault,
-      ...generate10KData(),
-      ...generate10KData(0.5),
-      ...generate10KData(1.2),
-      ...generate10KData(1.5),
-      ...generate10KData(1.7),
-      ...generate10KData(2.0),
-      ...generate10KData(2.2),
-      ...generate10KData(2.5),
-      ...generate10KData(3),
-    ].map(([name, lat, lng]) => ({
-      type: "Feature",
-      properties: { cluster: false, crimeId: lat, category: lng },
-      geometry: {
-        type: "Point",
-        coordinates: [parseFloat(lng), parseFloat(lat)],
-      },
-    }));
-    setPoints(points);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await allMarkers();
+        console.log("res is ", res.data.Items);
+      } catch (err) {
+        console.log("err is ", err);
+      }
+    })();
   }, []);
 
+  const handleAddData = async () => {
+    setLoading(true);
+    setErr("");
+
+    const mapArry = new Array(1).fill(0).map(async () => {
+      try {
+        await generateRandomMarkersApi(500);
+      } catch (err) {
+        console.log("err in generateRandomMarkersApi ", err);
+      }
+    });
+
+    try {
+      await Promise.all(mapArry);
+    } catch (err) {
+      console.log("err in Promise.all ", err);
+      setErr("err in generating the data");
+    }
+
+    setLoading(false);
+  };
+
+  const handleOpenMap = () => {
+    window.location.href = `/map`;
+  };
+
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: API_KEY }}
-        defaultCenter={defaultCenter}
-        defaultZoom={10}
-        yesIWantToUseGoogleMapApiInternals
-        onGoogleApiLoaded={({ map }) => {
-          mapRef.current = map;
-          loadAllPoints();
-        }}
-        onChange={({ zoom, bounds }) => {
-          setZoom(zoom);
-          setBounds([
-            bounds.nw.lng,
-            bounds.se.lat,
-            bounds.se.lng,
-            bounds.nw.lat,
-          ]);
-        }}
+    <div>
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        sx={{ minHeight: "100vh" }}
       >
-        {clusters.map((cluster, i) => {
-          const [longitude, latitude] = cluster.geometry.coordinates;
-          const { cluster: isCluster, point_count: pointCount } =
-            cluster.properties;
+        <Grid item>
+          <Typography variant="h4" component="h2">
+            General Details about the data
+          </Typography>
+        </Grid>
 
-          if (isCluster) {
-            return (
-              <Marker
-                key={`cluster-${cluster.id}-${i}`}
-                lat={latitude}
-                lng={longitude}
-              >
-                <div
-                  className="cluster-marker"
-                  style={{
-                    width: `${10 + (pointCount / points.length) * 20}px`,
-                    height: `${10 + (pointCount / points.length) * 20}px`,
-                  }}
-                  onClick={() => {
-                    const expansionZoom = Math.min(
-                      supercluster.getClusterExpansionZoom(cluster.id),
-                      20
-                    );
-                    mapRef.current.setZoom(expansionZoom);
-                    mapRef.current.panTo({ lat: latitude, lng: longitude });
-                  }}
-                >
-                  {pointCount}
-                </div>
-              </Marker>
-            );
-          }
-
-          return (
-            <Marker
-              key={`crime-${cluster.properties.crimeId}`}
-              lat={latitude}
-              lng={longitude}
-            >
-              <button className="crime-marker">
-                <AddLocationIcon />
-              </button>
-            </Marker>
-          );
-        })}
-      </GoogleMapReact>
+        <Grid item>
+          {/* <LoadingButton
+            color="primary"
+            variant="text"
+            size="large"
+            sx={{ py: 2 }}
+            loading={loading}
+            onClick={handleAddData}
+          >
+            Add 500 sample items in dynamodb
+          </LoadingButton> */}
+        </Grid>
+        <Grid item mt={2}>
+          <Button sx={{ fontSize: 20 }} onClick={handleOpenMap}>
+            Open Map
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
-}
+};
+
+export default Home;

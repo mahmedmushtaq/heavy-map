@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/marker": {
+      "name": "/marker",
+      "lambdaFunction": "MarkerHandler",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
