@@ -21,27 +21,32 @@ export default function App() {
   });
 
   const loadAllPoints = useCallback(async () => {
-    //  const res = await fetch("/api/markers").then((res) => res.json());
+    const res = await fetch(
+      "https://m46ieddo4h.execute-api.us-east-1.amazonaws.com/Prod/markers"
+    ).then((res) => res.json());
 
-    const points = [
-      ...dataDefault,
-      ...generate10KData(),
-      ...generate10KData(0.5),
-      ...generate10KData(1.2),
-      ...generate10KData(1.5),
-      ...generate10KData(1.7),
-      ...generate10KData(2.0),
-      ...generate10KData(2.2),
-      ...generate10KData(2.5),
-      ...generate10KData(3),
-    ].map(([name, lat, lng]) => ({
-      type: "Feature",
-      properties: { cluster: false, crimeId: lat, category: lng },
-      geometry: {
-        type: "Point",
-        coordinates: [parseFloat(lng), parseFloat(lat)],
-      },
-    }));
+    // const points = [
+    //   ...dataDefault,
+    //   ...generate10KData(),
+    //   ...generate10KData(0.5),
+    //   ...generate10KData(1.2),
+    //   ...generate10KData(1.5),
+    //   ...generate10KData(1.7),
+    //   ...generate10KData(2.0),
+    //   ...generate10KData(2.2),
+    //   ...generate10KData(2.5),
+    //   ...generate10KData(3),
+    // ]
+    const points = res.items.map(
+      ({ device_name, latitude, longitude, uid }) => ({
+        type: "Feature",
+        properties: { cluster: false, crimeId: uid, category: longitude },
+        geometry: {
+          type: "Point",
+          coordinates: [parseFloat(longitude), parseFloat(latitude)],
+        },
+      })
+    );
     setPoints(points);
   }, []);
 
