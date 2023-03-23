@@ -8,7 +8,6 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 import ReactGoogleAutocomplete from "react-google-autocomplete";
-import PlacesAutocomplete from "@/src/components/PlacesAutoComplete";
 import { Box, Button, Typography } from "@mui/material";
 
 const Marker = ({ children }) => children;
@@ -129,28 +128,6 @@ export default function GoogleMap({ requireFilter }) {
           })}
         </GoogleMapReact>
       </div>
-      {requireFilter && (
-        <Box
-          style={{
-            // left: "50%",
-            // right: "50%",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            background: "white",
-            flexDirection: "column",
-            // transform: "translateX(-50%)",
-            alignItems: "center",
-            zIndex: 999999,
-          }}
-          sx={{ mt: 2 }}
-        >
-          <Typography variant="h6" mr={1}>
-            Search Places
-          </Typography>
-          <PlacesAutocomplete setPanPosition={setPanPosition} />
-        </Box>
-      )}
     </div>
   );
 }
