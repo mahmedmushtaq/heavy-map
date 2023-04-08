@@ -14,13 +14,16 @@
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.13",
     "@next/font": "13.2.4",
+    "dequal": "^2.0.3",
+    "geojson": "^0.5.0",
     "google-map-react": "^2.2.0",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-cool-onclickoutside": "^1.7.0",
     "react-dom": "18.2.0",
     "react-google-autocomplete": "^2.7.3",
-    "use-places-autocomplete": "^4.0.0",
-    "use-supercluster": "^0.4.0"
+    "supercluster": "^7.1.5",
+    "use-deep-compare-effect": "^1.8.1",
+    "use-places-autocomplete": "^4.0.0"
   }
 }

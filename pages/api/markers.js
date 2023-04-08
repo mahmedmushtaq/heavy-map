@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import dataDefault, { generate10KData } from "@/src/data";
+import dataDefault, { generate10KData } from "@/src/common/data";
 
 export const config = {
   api: {
